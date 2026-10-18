@@ -7,6 +7,7 @@ A collection of GeoGuessr userscripts by **trausi** ([lonanche](https://github.c
 | Script | Description | Install |
 | --- | --- | --- |
 | [History Result Links](./geoguessr-game-results.user.js) | Adds an info icon beside the expand arrow in your map game history. Click it to open that game's result in a new tab. | [Install](https://raw.githubusercontent.com/lonanche/geoguessr-scripts/main/geoguessr-game-results.user.js) |
+| [Old Duel Summaries](./geoguessr-summary-recovery.user.js) | Restores summaries for old duels that no longer display. | [Install](https://raw.githubusercontent.com/lonanche/geoguessr-scripts/main/geoguessr-summary-recovery.user.js) |
 
 ## Installation
 
@@ -21,6 +22,12 @@ Open a map on GeoGuessr and view your game history. An info icon appears to the 
 The script reads GeoGuessr's own game-history responses and matches games by timestamp and score. It makes no additional game API requests. If no matching response is available, it adds no icon.
 
 It runs across GeoGuessr so it can observe requests when you navigate to a map without a full page reload. Row scanning only happens on map pages after game data is received. There is no polling.
+
+## Old Duel Summaries
+
+Open a duel summary that shows a game-not-found error. The script automatically tries to retrieve the finished duel from GeoGuessr's game server and display it using the site's summary page. Recovery status appears inside the error page.
+
+It watches for error-page changes to support navigation without a full reload, and attempts recovery once per duel visit. It requests duel data only when it detects a broken summary. Recovery depends on the finished duel still being available from GeoGuessr's game server and on the site's internal page structure.
 
 ## Updates
 
