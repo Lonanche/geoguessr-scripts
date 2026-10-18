@@ -6,7 +6,7 @@
 // @supportURL   https://github.com/lonanche/geoguessr-scripts/issues
 // @updateURL    https://raw.githubusercontent.com/lonanche/geoguessr-scripts/main/geoguessr-summary-recovery.user.js
 // @downloadURL  https://raw.githubusercontent.com/lonanche/geoguessr-scripts/main/geoguessr-summary-recovery.user.js
-// @version      1.0.2
+// @version      1.0.3
 // @description  Restore summaries for old duels that no longer display.
 // @match        https://www.geoguessr.com/*
 // @match        https://geoguessr.com/*
@@ -20,7 +20,7 @@
 (() => {
   'use strict';
   const w = unsafeWindow;
-  const route = /^\/(?:[a-z]{2}\/)?duels\/([a-f0-9]{24}|[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})(?:\/summary)?\/?$/i;
+  const route = /^\/(?:[a-z]{2}\/)?(?:team-)?duels\/([a-f0-9]{24}|[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})(?:\/summary)?\/?$/i;
   const idNow = () => location.pathname.match(route)?.[1];
   const errorSelector = '[class*="error_errorPage__"]';
   let previousId, attempted = false, busy = false;
@@ -110,12 +110,13 @@
 
   async function repair(g, initial, router, currentVisit) {
     const payload = nativeProps(initial, router.components?.[router.route]?.props, g);
+    const summaryPath = location.pathname.match(/\/(?:team-)?duels\//)[0] + g.gameId + '/summary.json';
     const original = w.fetch;
     let intercepted = false, timer;
     const wrapper = function(input, init) {
       const url = new URL(typeof input === 'string' ? input : input.url || String(input), location.origin);
       if (visit === currentVisit && idNow() === g.gameId && url.origin === location.origin && url.pathname.includes('/_next/data/') &&
-          url.pathname.endsWith('/duels/' + g.gameId + '/summary.json')) {
+          url.pathname.endsWith(summaryPath)) {
         intercepted = true;
         return Promise.resolve(new w.Response(JSON.stringify(payload), {
           status: 200, headers: {'content-type':'application/json'}

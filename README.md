@@ -25,7 +25,7 @@ It runs across GeoGuessr so it can observe requests when you navigate to a map w
 
 ## Old Duel Summaries
 
-Open a duel summary that shows a game-not-found error. The script automatically tries to retrieve the finished duel from GeoGuessr's game server and display it using the site's summary page. Recovery status appears inside the error page.
+Open a solo or team duel summary that shows a game-not-found error. The script automatically tries to retrieve the finished duel from GeoGuessr's game server and display it using the site's summary page. Recovery status appears inside the error page.
 
 It watches for error-page changes to support navigation without a full reload, and attempts recovery once per duel visit. It requests duel data only when it detects a broken summary. Recovery depends on the finished duel still being available from GeoGuessr's game server and on the site's internal page structure.
 
