@@ -6,7 +6,7 @@
 // @supportURL   https://github.com/lonanche/geoguessr-scripts/issues
 // @updateURL    https://raw.githubusercontent.com/lonanche/geoguessr-scripts/main/geoguessr-summary-recovery.user.js
 // @downloadURL  https://raw.githubusercontent.com/lonanche/geoguessr-scripts/main/geoguessr-summary-recovery.user.js
-// @version      1.0.0
+// @version      1.0.1
 // @description  Restore summaries for old duels that no longer display.
 // @match        https://www.geoguessr.com/*
 // @match        https://geoguessr.com/*
@@ -71,9 +71,12 @@
 
   function summaryShape(g) {
     const o = g.options || {};
+    // The API can include pre-generated locations for rounds never played.
+    const rounds = g.rounds.filter(r => r.startTime || r.endTime ||
+      g.teams.some(t => (t.roundResults || []).some(result => result.roundNumber === r.roundNumber)));
     return {
       gameId: g.gameId, context: g.context ?? null,
-      finishedAt: Date.parse(g.rounds.at(-1)?.endTime) || undefined,
+      finishedAt: Date.parse(rounds.at(-1)?.endTime) || undefined,
       options: {
         competitiveGameMode: o.competitiveGameMode,
         countAllGuesses: !!o.countAllGuesses, isRated: !!o.isRated,
@@ -85,7 +88,7 @@
       teams: g.teams.map(t => ({id: t.id, name: t.name,
         players: t.players.map(p => ({playerId: p.playerId, guesses: p.guesses || []})),
         roundResults: t.roundResults || []})),
-      rounds: g.rounds.map(r => ({roundNumber: r.roundNumber,
+      rounds: rounds.map(r => ({roundNumber: r.roundNumber,
         isHealingRound: !!r.isHealingRound, multiplier: r.multiplier ?? r.damageMultiplier ?? 1,
         lat: r.panorama?.lat ?? r.lat, lng: r.panorama?.lng ?? r.lng,
         panorama: {lat: r.panorama?.lat ?? r.lat, lng: r.panorama?.lng ?? r.lng}}))
