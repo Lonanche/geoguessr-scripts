@@ -6,7 +6,7 @@
 // @supportURL   https://github.com/lonanche/geoguessr-scripts/issues
 // @updateURL    https://raw.githubusercontent.com/lonanche/geoguessr-scripts/main/geoguessr-summary-recovery.user.js
 // @downloadURL  https://raw.githubusercontent.com/lonanche/geoguessr-scripts/main/geoguessr-summary-recovery.user.js
-// @version      1.0.1
+// @version      1.0.2
 // @description  Restore summaries for old duels that no longer display.
 // @match        https://www.geoguessr.com/*
 // @match        https://geoguessr.com/*
@@ -20,7 +20,7 @@
 (() => {
   'use strict';
   const w = unsafeWindow;
-  const route = /^\/(?:[a-z]{2}\/)?duels\/([a-f0-9]{24})(?:\/summary)?\/?$/i;
+  const route = /^\/(?:[a-z]{2}\/)?duels\/([a-f0-9]{24}|[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})(?:\/summary)?\/?$/i;
   const idNow = () => location.pathname.match(route)?.[1];
   const errorSelector = '[class*="error_errorPage__"]';
   let previousId, attempted = false, busy = false;
